@@ -1,4 +1,8 @@
-let todoList = [];
+let todoList = JSON.parse(localStorage.getItem('todoList')) || [];
+
+function saveToLocalStorage() {
+    localStorage.setItem('todoList', JSON.stringify(todoList));
+}
 
 function showMessage(text) {
     const display = document.getElementById('taskDisplay');
@@ -54,6 +58,7 @@ function addTask() {
     
     if (task) {
         todoList.push(task);
+        saveToLocalStorage(); // Save updated list to localStorage
         showMessage(`Task added successfully`);
         input.value = '';
         closeModal('addModal');
@@ -65,6 +70,7 @@ function deleteTask() {
     const select = document.getElementById('deleteSelect');
     const index = parseInt(select.value);
     const deletedTask = todoList.splice(index, 1)[0];
+    saveToLocalStorage(); // Save updated list to localStorage
     showMessage(`Task deleted successfully`);
     closeModal('deleteModal');
     viewTasks();
@@ -78,6 +84,7 @@ function updateTask() {
     
     if (newTask) {
         todoList[index] = newTask;
+        saveToLocalStorage(); // Save updated list to localStorage
         showMessage(`Task updated successfully`);
         input.value = '';
         closeModal('updateModal');
@@ -133,5 +140,5 @@ document.querySelectorAll('.modal').forEach(modal => {
     });
 });
 
-// Show initial empty state
+// Show initial tasks from localStorage
 viewTasks();
